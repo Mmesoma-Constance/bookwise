@@ -21,11 +21,13 @@ import {
   InputGroupTextarea,
 } from "@/components/ui/input-group"
 import Link from "next/link";
+import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
+import ImageUpload from "./ImageUpload";
 
 
 interface Props<T extends FieldValues> {
     type: "SIGN_IN" | "SIGN_UP";
-    schema: Zod.ZodType<T>;
+    schema: z.ZodType<T>;
     defaultValues: T;
     onSubmit: (data: T) => Promise<{success: boolean; error?: string }>;
 }
@@ -37,7 +39,7 @@ const AuthForm =  <T extends FieldValues>({ type, schema, defaultValues, onSubmi
     defaultValues: defaultValues as DefaultValues<T>
   })
  
-  const hnadleSubmit: SubmitHandler<T> = async (data) => {}
+  const handleSubmit: SubmitHandler<T> = async (data) => {}
 
   return (
     <div className="flex flex-col gap-4">
@@ -50,30 +52,43 @@ const AuthForm =  <T extends FieldValues>({ type, schema, defaultValues, onSubmi
             : "Please complete all fields and upload a valid university ID to gain access to the library"}
         </p>
     
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-      <FieldGroup>
+    <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 w-full">
+
+        {Object.keys(defaultValues).map((field) => (
+           <FieldGroup key={field}>
         <Controller
-          name={"username" as Path<T>}
+          name={field as Path<T>}
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Username</FieldLabel>
+              <FieldLabel className="capitalize" >{FIELD_NAMES[field.name as keyof typeof FIELD_NAMES]}</FieldLabel>
+             
+                {field.name === "universityCard" ? (
+                <ImageUpload />
+          ) : (
+
               <Input
-                {...field}
-                id={field.name}
-                placeholder="shadcn"
-                aria-invalid={fieldState.invalid}
+              required
+              type={
+                FIELD_TYPES[field.name as keyof typeof FIELD_TYPES]
+              }
+              {...field}
+              className="form-input"
               />
-              <FieldDescription>
-                This is your public display name.
-              </FieldDescription>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            )
+            }
+
+
+             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
-      </FieldGroup>
+      </FieldGroup>    
+        ))}
 
-      <Button type="submit">Submit</Button>
+      <Button type="submit" className="form-btn cursor-pointer">
+        {isSignedIn ? "Sign In" : "Sign Up"}
+      </Button>
     </form>
 
     <p className="text-center text-basse font-medium">
