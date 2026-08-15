@@ -12,7 +12,7 @@ export default function page() {
    <BookList 
    title="latest Books"
    books={sampleBooks}
-   containterClassName="mt-28" />
+   containerClassName="mt-28" />
     </>
   );
 }

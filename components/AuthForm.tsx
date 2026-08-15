@@ -39,7 +39,9 @@ const AuthForm =  <T extends FieldValues>({ type, schema, defaultValues, onSubmi
     defaultValues: defaultValues as DefaultValues<T>
   })
  
-  const handleSubmit: SubmitHandler<T> = async (data) => {}
+  const handleSubmit: SubmitHandler<T> = async (data) => {
+    await onSubmit(data)
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -64,7 +66,7 @@ const AuthForm =  <T extends FieldValues>({ type, schema, defaultValues, onSubmi
               <FieldLabel className="capitalize" >{FIELD_NAMES[field.name as keyof typeof FIELD_NAMES]}</FieldLabel>
              
                 {field.name === "universityCard" ? (
-                <ImageUpload />
+                <ImageUpload onFileChange={field.onChange} />
           ) : (
 
               <Input

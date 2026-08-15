@@ -15,8 +15,7 @@ const Page = () => (
      universityId: 0,
      universityCard: "",
  }}
-
- onsubmit={() => {}}
+ onSubmit={async () => ({ success: true })}
  />
 )
 

@@ -11,8 +11,7 @@ const Page = () => (
     email: "",
     password: "",
  }}
-
- onsubmit={() => {}}
+ onSubmit={async () => ({ success: true })}
  />
 )
 
