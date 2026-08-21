@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     ],
     unoptimized: true,
   },
+  databaseUrl: process.env.DATABASE_URL,
 };
 
 export default nextConfig;
